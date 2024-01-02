@@ -9,57 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     let emojis : [String] = ["👻","😈","👾","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃","🎃"] // alternative = Array<String>
-    @State var cardCount : Int = 1
     var body: some View {
-        VStack  {
-            ScrollView {
-                cards
-            }
+        
+        ScrollView {
+            cards
         }
-        Spacer()
-        cardProcess
-            .padding()
-            .font(.largeTitle)
-    }
-    
-
-    var cardProcess : some View { // viewbuilder
-        return HStack { // not viewbuilder
-            addButtonView
-            Spacer(minLength: 20)
-            deleteButtonView
-        }
-        .imageScale(.large)
-        .font(.largeTitle)
-    }
-    
-    var addButtonView : some View {
-        return cardProcesss(by: 1, label: "plus")
-    }
-    
-    
-    var deleteButtonView : some View {
-        return cardProcesss(by: -1, label: "minus.circle")
+        
     }
     
     var cards : some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
-            ForEach(0..<cardCount, id: \.self) { index in
+            ForEach(emojis.indices, id: \.self) { index in
                 CardView(content: emojis[index])
                     .aspectRatio(CGSize(width: 9, height: 9), contentMode: .fill)
             }
         }
     }
     
-    func cardProcesss(by offset : Int , label: String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image(systemName: label)
-        })
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
-    }
-        
 }
 
 struct CardView:View {
