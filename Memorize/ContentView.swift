@@ -8,13 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    let emojis : [String] = ["👻","😈","👾","🎃"] // alternative = Array<String>
     var body: some View {
         HStack {
-            CardView(isFaceUp: true)
-            CardView(isFaceUp: true)
-            CardView(isFaceUp: true)
-            CardView()
+            ForEach(emojis.indices, id: \.self) { index in
+                CardView(content: emojis[index])
+
+            }
         }
+        
         .foregroundStyle(.orange)
         .padding()
     }
@@ -22,24 +24,25 @@ struct ContentView: View {
 
 
 struct CardView:View {
-    var isFaceUp : Bool = false
+    @State var isFaceUp : Bool = false // state geçici olarak durumu çözer
+    let content : String
     var body: some View {
-        
         ZStack(content: { // tupleView. Bir fonksiyon gibi çalışır. Bu listeyi tupleView'a döndüren şey @ViewBuilder
+            let base = RoundedRectangle(cornerRadius: 12)
             if isFaceUp  {
-                RoundedRectangle(cornerRadius: 12)
-                    .foregroundStyle(.white)
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(lineWidth: 2)
-                Text("👻").font(.largeTitle)
+                base.foregroundStyle(.white)
+                base.strokeBorder(lineWidth: 2)
+                Text(content).font(.largeTitle)
             } else {
-                RoundedRectangle(cornerRadius: 12)
+                base.fill()
             }
-           
-
+            
         })
         .foregroundColor(Color.orange) // bu verileri dışarı koysak bile vstack içerisinde sadece onunla ilişkisi olan değerlere değişiklik sağlıyacağı için burada bize büyük bir esneklik sağlar.
         .padding()
+        .onTapGesture {
+            isFaceUp.toggle() // true-false bool ifadelerde kullanılabilir
+        }
     }
 }
 
