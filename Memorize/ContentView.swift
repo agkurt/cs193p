@@ -42,7 +42,7 @@ struct ContentView: View {
         return cardProcesss(by: -1, label: "minus.circle")
     }
     
-    var cards : some View {
+    var cards : some View { // computed property and closure
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
             ForEach(0..<cardCount, id: \.self) { index in
                 CardView(content: emojis[index])
