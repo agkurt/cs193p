@@ -10,11 +10,12 @@ import Foundation
     
 class EmojiMemoryGame:ObservableObject {
     
+    
     private static var emojis = ["👻","😈","👾","🎃","🤖","👽","☠️","🫥","💩","👀","🪰","🐏"] // static ile global hale getiriyoruz.
     
     @Published private var model = EmojiMemoryGame.createModel()
     
-    static func createModel() -> MemorizeGame<String> {
+    static func createModel() -> MemorizeGame<String>  {
         return MemorizeGame(numberOfPairsOfCards: 10)  { index in
             return EmojiMemoryGame.emojis[index]
         }
@@ -28,7 +29,7 @@ class EmojiMemoryGame:ObservableObject {
     
     func shuffle() {
         model.shuffle()
-        objectWillChange.send()
+        print(cards)
     }
     
     func choose (_ card :MemorizeGame<String>.Card) {

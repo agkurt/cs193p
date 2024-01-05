@@ -16,6 +16,7 @@ struct EmojiMemoryGameView: View {
         VStack {
             ScrollView {
                 cards
+                    .animation(.default, value: viewModel.cards)
             }
             Button("Shuffle") {
                 viewModel.shuffle()
@@ -24,13 +25,17 @@ struct EmojiMemoryGameView: View {
     }
     
     var cards : some View {
+        
+        // MARK: - ForEach Identity
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 85),spacing: 0)]) {
-            ForEach(viewModel.cards.indices, id: \.self) { index in
-                CardView(card: viewModel.cards[index])
+            ForEach(viewModel.cards) { card in
+                CardView(card: card)
                     .aspectRatio(2/3, contentMode: .fill)
                     .padding(4)
+                    .onTapGesture {
+                        viewModel.choose(card)
+                    }
             }
-            
         }
         .padding()
     }
@@ -57,7 +62,8 @@ struct CardView:View {
             .opacity(card.isFaceUp ? 1 : 0)
             base.fill().opacity(card.isFaceUp ? 0 : 1)
         })
-        .foregroundColor(Color.orange) // bu verileri dışarı koysak bile vstack içerisinde sadece onunla ilişkisi olan değerlere değişiklik sağlıyacağı için burada bize büyük bir esneklik sağlar.
+        .opacity(card.isFaceUp || !card.isMatched ? 1:0)
+        .foregroundStyle(.orange)
         
     }
 }
